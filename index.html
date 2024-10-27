@@ -1,0 +1,417 @@
+<html><head><base href="https://websim.creation.engine/youtube-favorites/">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JOE TJOEP - Toegankelijke Favorieten Speler</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    color: #333;
+    line-height: 1.6;
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+
+  .high-contrast {
+    background-color: #000;
+    color: #fff;
+  }
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+
+  h1, h2 {
+    color: #1a73e8;
+    margin: 0;
+  }
+
+  .high-contrast h1, .high-contrast h2 {
+    color: #ffff00;
+  }
+
+  #favoritesList {
+    list-style-type: none;
+    padding: 0;
+    margin-bottom: 10px;
+  }
+
+  #favoritesList li {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .high-contrast #favoritesList li {
+    background-color: #333;
+    border-color: #fff;
+  }
+
+  button, input[type="submit"] {
+    background-color: #1a73e8;
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    margin: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+
+  .high-contrast button, .high-contrast input[type="submit"] {
+    background-color: #ffff00;
+    color: #000;
+  }
+
+  button:hover, button:focus, input[type="submit"]:hover, input[type="submit"]:focus {
+    background-color: #155db1;
+  }
+
+  .high-contrast button:hover, .high-contrast button:focus, 
+  .high-contrast input[type="submit"]:hover, .high-contrast input[type="submit"]:focus {
+    background-color: #fff000;
+  }
+
+  #playerContainer {
+    width: 100%;
+    max-width: 800px;
+    margin-bottom: 20px;
+    display: none;
+  }
+
+  #player {
+    width: 100%;
+    height: 450px;
+    border: none;
+  }
+
+  #addFavoriteForm {
+    margin-top: 20px;
+    background-color: #e9e9e9;
+    padding: 15px;
+    border-radius: 5px;
+  }
+
+  .high-contrast #addFavoriteForm {
+    background-color: #222;
+  }
+
+  #addFavoriteForm input[type="text"] {
+    width: calc(100% - 22px);
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+  }
+
+  .high-contrast #addFavoriteForm input[type="text"] {
+    background-color: #444;
+    color: #fff;
+    border-color: #666;
+  }
+
+  #controls {
+    margin-bottom: 20px;
+  }
+
+  #toggleContrast, #togglePlayer, #toggleMobileView {
+    margin-left: 10px;
+  }
+
+  .hidden {
+    display: none;
+  }
+
+  #toggleAddFavorite {
+    width: auto;
+    margin-bottom: 20px;
+    align-self: flex-start;
+  }
+
+  .footer {
+    margin-top: auto;
+    text-align: center;
+  }
+
+  #toggleMobileView {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #4CAF50;
+    padding: 8px;
+    width: 32px;
+    height: 32px;
+    margin-left: 10px;
+  }
+
+  #toggleMobileView svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  @media (max-width: 600px) {
+    body {
+      padding: 10px;
+    }
+
+    .header {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    #controls button {
+      margin-bottom: 5px;
+    }
+
+    #player {
+      height: 250px;
+    }
+
+    .header > div {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-start;
+    }
+
+    #toggleMobileView {
+      margin-top: 5px;
+    }
+  }
+
+  .mobile-view {
+    max-width: 400px;
+    margin: 0 auto;
+  }
+
+  .mobile-view #player {
+    height: 225px;
+  }
+</style>
+</head>
+<body>
+  <div class="header">
+    <h1>JOE TJOEP</h1>
+    <div>
+      <button id="togglePlayer" aria-label="Toon de videospeler">Toon video</button>
+      <button id="toggleContrast" aria-label="Schakel hoog contrast modus">Hoog contrast</button>
+      <button id="toggleMobileView" aria-label="Schakel mobiele weergave">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+          <path d="M11 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h6zM5 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H5z"/>
+          <path d="M8 14a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <div id="playerContainer">
+    <iframe id="player" title="YouTube video speler" src="https://www.youtube.com/embed/dQw4w9WgXcQ" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+  </div>
+
+  <div id="controls">
+    <button id="playPause" aria-label="Afspelen of pauzeren">Afspelen</button>
+    <button id="stop" aria-label="Stop de video">Stop</button>
+    <button id="prevVideo" aria-label="Vorige video">Vorige</button>
+    <button id="nextVideo" aria-label="Volgende video">Volgende</button>
+  </div>
+
+  <h2>Jouw Favorieten</h2>
+  <ul id="favoritesList" aria-label="Lijst van favoriete video's">
+    <!-- Favorieten worden hier dynamisch toegevoegd -->
+  </ul>
+
+  <button id="toggleAddFavorite" aria-label="Toon formulier om nieuwe favoriet toe te voegen">Favoriet toevoegen</button>
+
+  <form id="addFavoriteForm" class="hidden" aria-label="Formulier om nieuwe favoriete video toe te voegen">
+    <h2>Voeg een nieuwe favoriet toe</h2>
+    <label for="videoUrl">YouTube Video URL:</label>
+    <input type="text" id="videoUrl" name="videoUrl" required aria-label="Voer de YouTube video URL in">
+    <label for="videoTitle">Video Titel:</label>
+    <input type="text" id="videoTitle" name="videoTitle" required aria-label="Voer de titel van de video in">
+    <input type="submit" value="Toevoegen" aria-label="Voeg de video toe aan favorieten">
+  </form>
+
+  <div class="footer">
+    <p>© 2023 JOE TJOEP - Alle rechten voorbehouden</p>
+  </div>
+
+<script>
+let favorites = [
+  { id: 'dQw4w9WgXcQ', title: 'Rick Astley - Never Gonna Give You Up' },
+  { id: '9bZkp7q19f0', title: 'PSY - GANGNAM STYLE' },
+  { id: 'kJQP7kiw5Fk', title: 'Luis Fonsi - Despacito ft. Daddy Yankee' }
+];
+
+const favoritesList = document.getElementById('favoritesList');
+const playerContainer = document.getElementById('playerContainer');
+const player = document.getElementById('player');
+const playPauseButton = document.getElementById('playPause');
+const stopButton = document.getElementById('stop');
+const prevButton = document.getElementById('prevVideo');
+const nextButton = document.getElementById('nextVideo');
+const toggleContrastButton = document.getElementById('toggleContrast');
+const togglePlayerButton = document.getElementById('togglePlayer');
+const toggleAddFavoriteButton = document.getElementById('toggleAddFavorite');
+const addFavoriteForm = document.getElementById('addFavoriteForm');
+const toggleMobileViewButton = document.getElementById('toggleMobileView');
+
+let currentVideoIndex = 0;
+
+function loadFavorites() {
+  favoritesList.innerHTML = '';
+  favorites.forEach((video, index) => {
+    const li = document.createElement('li');
+    li.innerHTML = `
+      <span tabindex="0">${video.title}</span>
+      <button class="removeButton" aria-label="Verwijder ${video.title} uit favorieten">Verwijderen</button>
+    `;
+    li.querySelector('span').addEventListener('click', () => playVideo(index));
+    li.querySelector('span').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') playVideo(index);
+    });
+    li.querySelector('.removeButton').addEventListener('click', () => removeFavorite(index));
+    favoritesList.appendChild(li);
+  });
+}
+
+function playVideo(index) {
+  currentVideoIndex = index;
+  player.src = `https://www.youtube.com/embed/${favorites[index].id}?enablejsapi=1`;
+  playPauseButton.textContent = 'Pauzeren';
+  playPauseButton.setAttribute('aria-label', 'Pauzeer de video');
+}
+
+function removeFavorite(index) {
+  favorites.splice(index, 1);
+  loadFavorites();
+  if (index === currentVideoIndex) {
+    currentVideoIndex = 0;
+    if (favorites.length > 0) {
+      playVideo(0);
+    } else {
+      player.src = '';
+    }
+  } else if (index < currentVideoIndex) {
+    currentVideoIndex--;
+  }
+}
+
+playPauseButton.addEventListener('click', () => {
+  if (playPauseButton.textContent === 'Afspelen') {
+    player.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
+    playPauseButton.textContent = 'Pauzeren';
+    playPauseButton.setAttribute('aria-label', 'Pauzeer de video');
+  } else {
+    player.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+    playPauseButton.textContent = 'Afspelen';
+    playPauseButton.setAttribute('aria-label', 'Speel de video af');
+  }
+});
+
+stopButton.addEventListener('click', () => {
+  player.contentWindow.postMessage('{"event":"command","func":"stopVideo","args":""}', '*');
+  playPauseButton.textContent = 'Afspelen';
+  playPauseButton.setAttribute('aria-label', 'Speel de video af');
+});
+
+prevButton.addEventListener('click', () => {
+  currentVideoIndex = (currentVideoIndex - 1 + favorites.length) % favorites.length;
+  playVideo(currentVideoIndex);
+});
+
+nextButton.addEventListener('click', () => {
+  currentVideoIndex = (currentVideoIndex + 1) % favorites.length;
+  playVideo(currentVideoIndex);
+});
+
+toggleContrastButton.addEventListener('click', () => {
+  document.body.classList.toggle('high-contrast');
+  if (document.body.classList.contains('high-contrast')) {
+    toggleContrastButton.textContent = 'Normaal contrast';
+    toggleContrastButton.setAttribute('aria-label', 'Schakel naar normaal contrast');
+  } else {
+    toggleContrastButton.textContent = 'Hoog contrast';
+    toggleContrastButton.setAttribute('aria-label', 'Schakel naar hoog contrast');
+  }
+});
+
+togglePlayerButton.addEventListener('click', () => {
+  if (playerContainer.style.display === 'none') {
+    playerContainer.style.display = 'block';
+    togglePlayerButton.textContent = 'Verberg video';
+    togglePlayerButton.setAttribute('aria-label', 'Verberg de videospeler');
+  } else {
+    playerContainer.style.display = 'none';
+    togglePlayerButton.textContent = 'Toon video';
+    togglePlayerButton.setAttribute('aria-label', 'Toon de videospeler');
+  }
+});
+
+toggleAddFavoriteButton.addEventListener('click', () => {
+  addFavoriteForm.classList.toggle('hidden');
+  if (addFavoriteForm.classList.contains('hidden')) {
+    toggleAddFavoriteButton.textContent = 'Favoriet toevoegen';
+    toggleAddFavoriteButton.setAttribute('aria-label', 'Toon formulier om nieuwe favoriet toe te voegen');
+  } else {
+    toggleAddFavoriteButton.textContent = 'Verberg formulier';
+    toggleAddFavoriteButton.setAttribute('aria-label', 'Verberg formulier om nieuwe favoriet toe te voegen');
+  }
+});
+
+addFavoriteForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const videoUrl = document.getElementById('videoUrl').value;
+  const videoTitle = document.getElementById('videoTitle').value;
+  const videoId = extractVideoId(videoUrl);
+
+  if (videoId) {
+    favorites.push({ id: videoId, title: videoTitle });
+    loadFavorites();
+    addFavoriteForm.reset();
+  } else {
+    alert('Ongeldige YouTube URL. Probeer opnieuw.');
+  }
+});
+
+function extractVideoId(url) {
+  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+  const match = url.match(regExp);
+  return (match && match[2].length === 11) ? match[2] : null;
+}
+
+toggleMobileViewButton.addEventListener('click', () => {
+  document.body.classList.toggle('mobile-view');
+  if (document.body.classList.contains('mobile-view')) {
+    toggleMobileViewButton.innerHTML = `
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+        <path d="M13 1a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h10zM3 0a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V3a3 3 0 0 0-3-3H3z"/>
+        <path d="M5 15.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm0-2a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5z"/>
+      </svg>
+    `;
+    toggleMobileViewButton.setAttribute('aria-label', 'Schakel desktop weergave');
+  } else {
+    toggleMobileViewButton.innerHTML = `
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+        <path d="M11 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h6zM5 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H5z"/>
+        <path d="M8 14a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/>
+      </svg>
+    `;
+    toggleMobileViewButton.setAttribute('aria-label', 'Schakel mobiele weergave');
+  }
+});
+
+loadFavorites();
+</script>
+
+</body></html>
